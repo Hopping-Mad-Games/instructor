@@ -147,7 +147,15 @@ class OpenAISchema(BaseModel):
     ) -> BaseModel:
         from anthropic.types import Message
 
-        assert isinstance(completion, Message)
+        if not isinstance(completion, Message):
+            completion = completion.choices[0].message
+            if not isinstance(completion, Message):
+                text = completion.json()["content"]
+                extra_text = extract_json_from_codeblock(text)
+                
+        else:
+            text = completion.content[0].text
+            extra_text = extract_json_from_codeblock(text)
 
         text = completion.content[0].text
         extra_text = extract_json_from_codeblock(text)
