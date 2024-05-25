@@ -157,9 +157,6 @@ class OpenAISchema(BaseModel):
             text = completion.content[0].text
             extra_text = extract_json_from_codeblock(text)
 
-        text = completion.content[0].text
-        extra_text = extract_json_from_codeblock(text)
-
         if strict:
             return cls.model_validate_json(
                 extra_text, context=validation_context, strict=True
